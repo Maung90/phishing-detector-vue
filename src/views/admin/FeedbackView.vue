@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen pb-8">
+  <div class="min-h-screen">
     <!-- Header -->
     <header class="glass-effect border-b border-slate-700/50 sticky top-0 z-40">
       <div class="max-w-7xl mx-auto px-4 py-4">
@@ -59,117 +59,93 @@
     <div class="max-w-7xl mx-auto px-4 py-8">
       <!-- Header -->
       <div class="mb-8 fade-in">
-        <h2 class="text-3xl font-bold text-white mb-2">Detection History</h2>
+        <h2 class="text-3xl font-bold text-white mb-2">User Feedback Reports</h2>
         <p class="text-slate-400">
-          Complete log of all scan activities
+          Review false detection reports submitted by users
         </p>
       </div>
 
       <!-- Stats -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 fade-in">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8 fade-in">
         <div class="glass-effect rounded-xl p-6 border border-slate-700/50">
           <div class="text-3xl font-bold text-white mb-1">
-            {{ scannerStore.scanHistory.length }}
+            {{ scannerStore.feedbackReports.length }}
           </div>
-          <div class="text-sm text-slate-400">Total Scans</div>
+          <div class="text-sm text-slate-400">Total Reports</div>
         </div>
         <div class="glass-effect rounded-xl p-6 border border-slate-700/50">
           <div class="text-3xl font-bold text-white mb-1">
-            {{ phishingCount }}
+            {{ pendingReports }}
           </div>
-          <div class="text-sm text-slate-400">Phishing Detected</div>
+          <div class="text-sm text-slate-400">Pending Review</div>
         </div>
         <div class="glass-effect rounded-xl p-6 border border-slate-700/50">
           <div class="text-3xl font-bold text-white mb-1">
-            {{ legitimateCount }}
+            2.3%
           </div>
-          <div class="text-sm text-slate-400">Legitimate</div>
-        </div>
-        <div class="glass-effect rounded-xl p-6 border border-slate-700/50">
-          <div class="text-3xl font-bold text-white mb-1">
-            {{ averageScore }}%
-          </div>
-          <div class="text-sm text-slate-400">Avg Threat Score</div>
+          <div class="text-sm text-slate-400">False Positive Rate</div>
         </div>
       </div>
 
-      <!-- History Table -->
+      <!-- Feedback Table -->
       <div class="glass-effect rounded-2xl shadow-2xl overflow-hidden fade-in">
         <div class="overflow-x-auto">
           <table class="w-full">
             <thead class="bg-slate-800/50 border-b border-slate-700">
               <tr>
                 <th class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Scan ID
+                  Report ID
                 </th>
                 <th class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  URL
+                  Description
                 </th>
                 <th class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Type
+                  Proposed Status
                 </th>
                 <th class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Score
+                  Submitted
                 </th>
                 <th class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
                   Status
-                </th>
-                <th class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Timestamp
                 </th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-700/50">
               <tr
-                v-for="scan in scannerStore.scanHistory"
-                :key="scan.id"
+                v-for="report in scannerStore.feedbackReports"
+                :key="report.id"
                 class="hover:bg-slate-800/30 transition-colors"
               >
                 <td class="px-6 py-4">
                   <code class="text-sm font-mono text-cyan-400">
-                    #{{ scan.id }}
+                    #{{ report.id }}
                   </code>
                 </td>
                 <td class="px-6 py-4">
-                  <p class="text-sm text-white max-w-xs truncate font-mono">
-                    {{ scan.url }}
+                  <p class="text-sm text-white max-w-md">
+                    {{ report.keterangan }}
                   </p>
-                </td>
-                <td class="px-6 py-4">
-                  <span class="inline-flex items-center gap-2 px-3 py-1 rounded-lg font-semibold text-xs bg-slate-700/50 text-slate-300">
-                    <component :is="getScanTypeIcon(scan.type)" class="w-3 h-3" />
-                    {{ formatScanType(scan.type) }}
-                  </span>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center gap-2">
-                    <div class="w-16 h-2 bg-slate-800 rounded-full overflow-hidden">
-                      <div
-                        :class="[
-                          'h-full',
-                          scan.score > 50 ? 'bg-danger-500' : 'bg-safe-500'
-                        ]"
-                        :style="{ width: scan.score + '%' }"
-                      ></div>
-                    </div>
-                    <span class="text-sm font-mono text-white">{{ scan.score }}%</span>
-                  </div>
                 </td>
                 <td class="px-6 py-4">
                   <span
                     :class="[
                       'inline-flex items-center gap-2 px-3 py-1 rounded-lg font-semibold text-xs',
-                      scan.status === 'Phishing'
+                      report.proposedStatus === 'Phishing'
                         ? 'bg-danger-500/20 text-danger-300 border border-danger-500/50'
                         : 'bg-safe-500/20 text-safe-300 border border-safe-500/50'
                     ]"
                   >
-                    <component :is="scan.status === 'Phishing' ? AlertTriangle : ShieldCheck" class="w-3 h-3" />
-                    {{ scan.status }}
+                    {{ report.proposedStatus }}
                   </span>
                 </td>
-                <td class="px-6 py-4 text-sm text-slate-400 whitespace-nowrap">
-                  {{ formatDate(scan.timestamp) }}
+                <td class="px-6 py-4 text-sm text-slate-400">
+                  {{ formatDate(report.timestamp) }}
+                </td>
+                <td class="px-6 py-4">
+                  <span class="inline-flex items-center gap-2 px-3 py-1 rounded-lg font-semibold text-xs bg-orange-500/20 text-orange-300 border border-orange-500/50">
+                    <Clock class="w-3 h-3" />
+                    {{ report.status }}
+                  </span>
                 </td>
               </tr>
             </tbody>
@@ -177,10 +153,10 @@
         </div>
 
         <!-- Empty State -->
-        <div v-if="scannerStore.scanHistory.length === 0" class="text-center py-16">
-          <History class="w-16 h-16 text-slate-600 mx-auto mb-4" />
-          <h3 class="text-xl font-semibold text-white mb-2">No Scan History</h3>
-          <p class="text-slate-400">Scan data will appear here</p>
+        <div v-if="scannerStore.feedbackReports.length === 0" class="text-center py-16">
+          <MessageSquare class="w-16 h-16 text-slate-600 mx-auto mb-4" />
+          <h3 class="text-xl font-semibold text-white mb-2">No Feedback Reports</h3>
+          <p class="text-slate-400">User feedback will appear here</p>
         </div>
       </div>
     </div>
@@ -193,8 +169,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useScannerStore } from '@/stores/scanner'
 import {
-  Shield, LogOut, LayoutDashboard, Brain, MessageSquare, History,
-  AlertTriangle, ShieldCheck, QrCode, Upload, Link2
+  Shield, LogOut, LayoutDashboard, Brain, MessageSquare, History, Clock
 } from 'lucide-vue-next'
 
 const router = useRouter()
@@ -202,19 +177,9 @@ const route = useRoute()
 const authStore = useAuthStore()
 const scannerStore = useScannerStore()
 
-const phishingCount = computed(() =>
-  scannerStore.scanHistory.filter(s => s.status === 'Phishing').length
+const pendingReports = computed(() =>
+  scannerStore.feedbackReports.filter(r => r.status === 'pending').length
 )
-
-const legitimateCount = computed(() =>
-  scannerStore.scanHistory.filter(s => s.status === 'Legitimate').length
-)
-
-const averageScore = computed(() => {
-  if (scannerStore.scanHistory.length === 0) return 0
-  const sum = scannerStore.scanHistory.reduce((acc, scan) => acc + scan.score, 0)
-  return Math.round(sum / scannerStore.scanHistory.length)
-})
 
 const navClass = (path) => {
   return [
@@ -238,23 +203,5 @@ const formatDate = (dateString) => {
     hour: '2-digit',
     minute: '2-digit'
   })
-}
-
-const getScanTypeIcon = (type) => {
-  const icons = {
-    'qr-scan': QrCode,
-    'qr-upload': Upload,
-    'url-input': Link2
-  }
-  return icons[type] || QrCode
-}
-
-const formatScanType = (type) => {
-  const types = {
-    'qr-scan': 'QR Scan',
-    'qr-upload': 'QR Upload',
-    'url-input': 'URL Input'
-  }
-  return types[type] || type
 }
 </script>
