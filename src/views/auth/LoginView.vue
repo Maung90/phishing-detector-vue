@@ -52,9 +52,9 @@
             </div>
           </div>
 
-          <div v-if="errorMessage" class="bg-red-500/10 border border-red-500/50 rounded-lg p-3 flex items-start gap-3">
-            <AlertCircle class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-            <p class="text-sm text-red-300">{{ errorMessage }}</p>
+          <div v-if="errorMessage" class="bg-[#FC0A0A]/10 border border-[#FC0A0A]/50 rounded-lg p-3 flex items-start gap-3">
+            <AlertCircle class="w-5 h-5 text-[#FC0A0A] flex-shrink-0 mt-0.5" />
+            <p class="text-sm text-[#FC0A0A]">{{ errorMessage }}</p>
           </div>
 
           <button

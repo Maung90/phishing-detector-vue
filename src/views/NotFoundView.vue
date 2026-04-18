@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center p-4">
+  <div class="min-h-screen flex items-center justify-center p-4 bg-black/">
     <div class="text-center fade-in">
       <div class="inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-gradient-to-br from-danger-500 to-danger-700 mb-6 shadow-lg shadow-danger-500/30">
         <AlertTriangle class="w-12 h-12 text-white" />

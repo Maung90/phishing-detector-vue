@@ -1,190 +1,129 @@
 <template>
   <div class="min-h-screen pb-8">
-    <!-- Header -->
-    <header class="glass-effect border-b border-slate-700/50 sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto px-4 py-4">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-danger-500 to-danger-700 flex items-center justify-center">
-              <Shield class="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 class="text-xl font-bold text-white">SEQR Admin</h1>
-              <p class="text-xs text-slate-400 font-mono">System Management</p>
-            </div>
-          </div>
-          <button
-            @click="handleLogout"
-            class="p-2 hover:bg-slate-800 rounded-lg transition-colors"
-            title="Logout"
-          >
-            <LogOut class="w-5 h-5 text-slate-400" />
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <!-- Navigation -->
-    <nav class="glass-effect border-b border-slate-700/50">
-      <div class="max-w-7xl mx-auto px-4">
-        <div class="flex gap-1 overflow-x-auto">
-          <RouterLink to="/admin" :class="navClass('/admin')">
-            <div class="flex items-center gap-2">
-              <LayoutDashboard class="w-4 h-4" />
-              <span class="hidden sm:inline">Dashboard</span>
-            </div>
-          </RouterLink>
-          <RouterLink to="/admin/models" :class="navClass('/admin/models')">
-            <div class="flex items-center gap-2">
-              <Brain class="w-4 h-4" />
-              <span class="hidden sm:inline">Models</span>
-            </div>
-          </RouterLink>
-          <RouterLink to="/admin/feedback" :class="navClass('/admin/feedback')">
-            <div class="flex items-center gap-2">
-              <MessageSquare class="w-4 h-4" />
-              <span class="hidden sm:inline">Feedback</span>
-            </div>
-          </RouterLink>
-          <RouterLink to="/admin/history" :class="navClass('/admin/history')">
-            <div class="flex items-center gap-2">
-              <History class="w-4 h-4" />
-              <span class="hidden sm:inline">History</span>
-            </div>
-          </RouterLink>
-        </div>
-      </div>
-    </nav>
-
+    <Header />
+    <Navbar />
     <div class="max-w-7xl mx-auto px-4 py-8">
-      <!-- Header -->
-      <div class="mb-8 fade-in">
-        <h2 class="text-3xl font-bold text-white mb-2">Detection History</h2>
-        <p class="text-slate-400">
-          Complete log of all scan activities
-        </p>
-      </div>
 
-      <!-- Stats -->
+      <WelcomeMessage title="Riwayat Pemindaian" message="Lihat semua pemindaian yang telah dilakukan dan hasilnya." />
+
+
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 fade-in">
-        <div class="glass-effect rounded-xl p-6 border border-slate-700/50">
-          <div class="text-3xl font-bold text-white mb-1">
+        <div class="glass-effect rounded-xl p-6 bg-[#2c63d1]/5 border border-black/10">
+          <div class="text-3xl font-bold text-black mb-1">
             {{ scannerStore.scanHistory.length }}
           </div>
-          <div class="text-sm text-slate-400">Total Scans</div>
+          <div class="text-sm text-black/60">Total Pemindaian</div>
         </div>
-        <div class="glass-effect rounded-xl p-6 border border-slate-700/50">
-          <div class="text-3xl font-bold text-white mb-1">
+        <div class="glass-effect rounded-xl p-6 bg-[#2c63d1]/5 border border-black/10">
+          <div class="text-3xl font-bold text-black mb-1">
             {{ phishingCount }}
           </div>
-          <div class="text-sm text-slate-400">Phishing Detected</div>
+          <div class="text-sm text-black/60">Phishing Terdeteksi</div>
         </div>
-        <div class="glass-effect rounded-xl p-6 border border-slate-700/50">
-          <div class="text-3xl font-bold text-white mb-1">
+        <div class="glass-effect rounded-xl p-6 bg-[#2c63d1]/5 border border-black/10">
+          <div class="text-3xl font-bold text-black mb-1">
             {{ legitimateCount }}
           </div>
-          <div class="text-sm text-slate-400">Legitimate</div>
+          <div class="text-sm text-black/60">Aman (Legitimate)</div>
         </div>
-        <div class="glass-effect rounded-xl p-6 border border-slate-700/50">
-          <div class="text-3xl font-bold text-white mb-1">
+        <div class="glass-effect rounded-xl p-6 bg-[#2c63d1]/5 border border-black/10">
+          <div class="text-3xl font-bold text-black mb-1">
             {{ averageScore }}%
           </div>
-          <div class="text-sm text-slate-400">Avg Threat Score</div>
+          <div class="text-sm text-black/60">Rata-rata Skor Ancaman</div>
         </div>
       </div>
 
-      <!-- History Table -->
-      <div class="glass-effect rounded-2xl shadow-2xl overflow-hidden fade-in">
+      <div class="glass-effect rounded-2xl shadow-2xl overflow-hidden fade-in bg-[#2c63d1]/20 border border-black/10">
         <div class="overflow-x-auto">
           <table class="w-full">
-            <thead class="bg-slate-800/50 border-b border-slate-700">
+            <thead class="bg-[#2c63d1]/50 border-b border-black/10">
               <tr>
-                <th class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Scan ID
+                <th class="px-6 py-4 text-left text-xs font-semibold text-black/60 uppercase tracking-wider">
+                  ID Pemindaian
                 </th>
-                <th class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <th class="px-6 py-4 text-left text-xs font-semibold text-black/60 uppercase tracking-wider">
                   URL
                 </th>
-                <th class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Type
+                <th class="px-6 py-4 text-left text-xs font-semibold text-black/60 uppercase tracking-wider">
+                  Tipe
                 </th>
-                <th class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Score
+                <th class="px-6 py-4 text-left text-xs font-semibold text-black/60 uppercase tracking-wider">
+                  Skor
                 </th>
-                <th class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <th class="px-6 py-4 text-left text-xs font-semibold text-black/60 uppercase tracking-wider">
                   Status
                 </th>
-                <th class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Timestamp
+                <th class="px-6 py-4 text-left text-xs font-semibold text-black/60 uppercase tracking-wider">
+                  Waktu
                 </th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-700/50">
+            <tbody class="divide-y divide-black/10">
               <tr
-                v-for="scan in scannerStore.scanHistory"
-                :key="scan.id"
-                class="hover:bg-slate-800/30 transition-colors"
+              v-for="scan in scannerStore.scanHistory"
+              :key="scan.id"
+              class="hover:bg-[#2c63d1]/5 transition-colors"
               >
-                <td class="px-6 py-4">
-                  <code class="text-sm font-mono text-cyan-400">
-                    #{{ scan.id }}
-                  </code>
-                </td>
-                <td class="px-6 py-4">
-                  <p class="text-sm text-white max-w-xs truncate font-mono">
-                    {{ scan.url }}
-                  </p>
-                </td>
-                <td class="px-6 py-4">
-                  <span class="inline-flex items-center gap-2 px-3 py-1 rounded-lg font-semibold text-xs bg-slate-700/50 text-slate-300">
-                    <component :is="getScanTypeIcon(scan.type)" class="w-3 h-3" />
-                    {{ formatScanType(scan.type) }}
-                  </span>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center gap-2">
-                    <div class="w-16 h-2 bg-slate-800 rounded-full overflow-hidden">
-                      <div
-                        :class="[
-                          'h-full',
-                          scan.score > 50 ? 'bg-danger-500' : 'bg-safe-500'
-                        ]"
-                        :style="{ width: scan.score + '%' }"
-                      ></div>
-                    </div>
-                    <span class="text-sm font-mono text-white">{{ scan.score }}%</span>
-                  </div>
-                </td>
-                <td class="px-6 py-4">
-                  <span
+              <td class="px-6 py-4">
+                <code class="text-sm font-mono text-[#eded74]">
+                  #{{ scan.id }}
+                </code>
+              </td>
+              <td class="px-6 py-4">
+                <p class="text-sm text-black max-w-xs truncate font-mono">
+                  {{ scan.url }}
+                </p>
+              </td>
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-lg font-semibold text-xs bg-black/10 text-black/80 border border-white/5">
+                  <component :is="getScanTypeIcon(scan.type)" class="w-3 h-3" />
+                  {{ formatScanType(scan.type) }}
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-2">
+                  <div class="w-16 h-2 bg-[#1e2530] rounded-full overflow-hidden border border-black/10">
+                    <div
                     :class="[
-                      'inline-flex items-center gap-2 px-3 py-1 rounded-lg font-semibold text-xs',
-                      scan.status === 'Phishing'
-                        ? 'bg-danger-500/20 text-danger-300 border border-danger-500/50'
-                        : 'bg-safe-500/20 text-safe-300 border border-safe-500/50'
+                    'h-full',
+                    scan.score > 50 ? 'bg-[#ef4444]' : 'bg-[#22c55e]'
                     ]"
-                  >
-                    <component :is="scan.status === 'Phishing' ? AlertTriangle : ShieldCheck" class="w-3 h-3" />
-                    {{ scan.status }}
-                  </span>
-                </td>
-                <td class="px-6 py-4 text-sm text-slate-400 whitespace-nowrap">
-                  {{ formatDate(scan.timestamp) }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                    :style="{ width: scan.score + '%' }"
+                    ></div>
+                  </div>
+                  <span class="text-sm font-mono text-black">{{ scan.score }}%</span>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span
+                :class="[
+                'inline-flex items-center gap-2 px-3 py-1 rounded-lg font-semibold text-xs border',
+                scan.status === 'Phishing'
+                ? 'bg-[#ef4444]/20 text-[#f87171] border-[#ef4444]/50'
+                : 'bg-[#22c55e]/20 text-[#4ade80] border-[#22c55e]/50'
+                ]"
+                >
+                <component :is="scan.status === 'Phishing' ? AlertTriangle : ShieldCheck" class="w-3 h-3" />
+                {{ scan.status === 'Phishing' ? 'Phishing' : 'Aman' }}
+              </span>
+            </td>
+            <td class="px-6 py-4 text-sm text-black/60 whitespace-nowrap">
+              {{ formatDate(scan.timestamp) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <!-- Empty State -->
-        <div v-if="scannerStore.scanHistory.length === 0" class="text-center py-16">
-          <History class="w-16 h-16 text-slate-600 mx-auto mb-4" />
-          <h3 class="text-xl font-semibold text-white mb-2">No Scan History</h3>
-          <p class="text-slate-400">Scan data will appear here</p>
-        </div>
-      </div>
+    <div v-if="scannerStore.scanHistory.length === 0" class="text-center py-16">
+      <History class="w-16 h-16 text-black/40 mx-auto mb-4" />
+      <h3 class="text-xl font-semibold text-black mb-2">Tidak Ada Riwayat Pemindaian</h3>
+      <p class="text-black/60">Data pemindaian akan muncul di sini</p>
     </div>
   </div>
+</div>
+</div>
 </template>
 
 <script setup>
@@ -197,6 +136,8 @@ import {
   AlertTriangle, ShieldCheck, QrCode, Upload, Link2
 } from 'lucide-vue-next'
 
+import {Header, Navbar, WelcomeMessage } from './components'
+
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
@@ -204,25 +145,25 @@ const scannerStore = useScannerStore()
 
 const phishingCount = computed(() =>
   scannerStore.scanHistory.filter(s => s.status === 'Phishing').length
-)
+  )
 
 const legitimateCount = computed(() =>
   scannerStore.scanHistory.filter(s => s.status === 'Legitimate').length
-)
+  )
 
 const averageScore = computed(() => {
   if (scannerStore.scanHistory.length === 0) return 0
-  const sum = scannerStore.scanHistory.reduce((acc, scan) => acc + scan.score, 0)
+    const sum = scannerStore.scanHistory.reduce((acc, scan) => acc + scan.score, 0)
   return Math.round(sum / scannerStore.scanHistory.length)
 })
 
 const navClass = (path) => {
   return [
-    'px-4 py-3 font-medium transition-all whitespace-nowrap',
-    route.path === path
-      ? 'text-danger-400 border-b-2 border-danger-400'
-      : 'text-slate-400 hover:text-white'
-  ]
+  'px-4 py-3 font-medium transition-all whitespace-nowrap',
+  route.path === path
+  ? 'text-[#eded74] border-b-2 border-[#eded74]'
+  : 'text-black/60 hover:text-black'
+]
 }
 
 const handleLogout = () => {
@@ -230,8 +171,9 @@ const handleLogout = () => {
   router.push('/login')
 }
 
+// Format waktu disesuaikan ke format Indonesia (id-ID)
 const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleString('en-US', {
+  return new Date(dateString).toLocaleString('id-ID', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -251,9 +193,9 @@ const getScanTypeIcon = (type) => {
 
 const formatScanType = (type) => {
   const types = {
-    'qr-scan': 'QR Scan',
-    'qr-upload': 'QR Upload',
-    'url-input': 'URL Input'
+    'qr-scan': 'Pindai QR',
+    'qr-upload': 'Unggah QR',
+    'url-input': 'Input URL'
   }
   return types[type] || type
 }

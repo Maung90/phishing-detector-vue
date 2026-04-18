@@ -13,7 +13,7 @@ const props = defineProps({
 
 <template>
   <div class="glass-effect rounded-xl p-6 border border-primary/10"
-       :style="{ backgroundColor: color + '0D' }">
+       :style="{ backgroundColor: color + '0D' }"> <!-- 0D = opacity -->
 
     <div class="flex items-center justify-between mb-4">
       <div
