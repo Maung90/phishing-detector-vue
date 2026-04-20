@@ -9,6 +9,7 @@
       <WelcomeMessage title="Dashboard Admin" message="Here’s a quick overview of your dashboard and recent activity."/>
 
       <!-- Stats Grid -->
+
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 fade-in">
 
         <StatCard

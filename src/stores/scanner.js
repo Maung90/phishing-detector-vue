@@ -1,94 +1,102 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import api from '../utils/axios' // Import custom axios instance
 
 export const useScannerStore = defineStore('scanner', () => {
   const scanHistory = ref([])
   const feedbackReports = ref([])
   
-  // Mock threat detection
-  const analyzeThreat = (url) => {
-    const threats = [
-      { 
-        score: 92, 
-        status: 'Phishing',
-        reason: 'URL contains suspicious subdomain pattern mimicking a legitimate banking institution. Domain registered recently (3 days ago). Uses HTTPS to appear secure but certificate is self-signed.',
-        url,
-        timestamp: new Date().toISOString()
-      },
-      { 
-        score: 15, 
-        status: 'Legitimate',
-        reason: 'Domain has been active for 8 years with consistent WHOIS records. Valid SSL certificate from trusted authority. No phishing patterns detected in URL structure.',
-        url,
-        timestamp: new Date().toISOString()
-      },
-      { 
-        score: 78, 
-        status: 'Phishing',
-        reason: 'Detected typosquatting attempt - domain closely resembles "paypal.com". Contains unicode characters to deceive users. Hosting provider flagged for malicious activity.',
-        url,
-        timestamp: new Date().toISOString()
-      },
-      { 
-        score: 8, 
-        status: 'Legitimate',
-        reason: 'Official government domain with proper authentication. Domain matches expected patterns for legitimate services. No security concerns identified.',
-        url,
-        timestamp: new Date().toISOString()
-      },
-    ]
-    
-    return threats[Math.floor(Math.random() * threats.length)]
+  const isLoading = ref(false)
+  const error = ref(null)
+  
+  const currentScanResult = ref(null)
+
+  const getRecentScans = computed(() => {
+    return (limit = 10) => scanHistory.value.slice(0, limit)
+  })
+
+  const fetchScanHistory = async (limit = 100) => {
+    try {
+      const response = await api.get(`/scans?limit=${limit}`)
+      scanHistory.value = response.data.history || []
+    } catch (err) {
+      console.error('Gagal mengambil riwayat scan:', err)
+    }
   }
 
-  const performScan = async (scanData) => {
-    // Simulate scanning delay
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    const result = analyzeThreat(scanData.url || scanData.data)
-    
-    const scanRecord = {
-      id: Date.now(),
-      type: scanData.type,
-      ...result,
-      userId: scanData.userId || 'anonymous'
+const performScan = async (scanData) => {
+    isLoading.value = true
+    error.value = null
+    currentScanResult.value = null
+
+    try {
+      const targetData = scanData.url || scanData.data
+
+      const response = await api.post('/scan', {
+        type: scanData.type,
+        target: targetData
+      })
+      
+      const scanRecord = response.data.result
+
+      currentScanResult.value = scanRecord
+
+      scanHistory.value.unshift(scanRecord)
+      
+      if (scanHistory.value.length > 100) {
+        scanHistory.value = scanHistory.value.slice(0, 100)
+      }
+
+      return { success: true, data: scanRecord }
+    } catch (err) {
+      error.value = err.response?.data?.message || err.response?.data?.detail || 'Terjadi kesalahan saat menganalisis target.'
+      return { success: false, error: error.value }
+    } finally {
+      isLoading.value = false
     }
-    
-    scanHistory.value.unshift(scanRecord)
-    
-    // Keep only last 100 scans
-    if (scanHistory.value.length > 100) {
-      scanHistory.value = scanHistory.value.slice(0, 100)
-    }
-    
-    return scanRecord
   }
 
   const submitFeedback = async (scanId, feedback) => {
-    await new Promise(resolve => setTimeout(resolve, 500))
-    
-    const feedbackRecord = {
-      id: Date.now(),
-      scanId,
-      keterangan: feedback.keterangan,
-      proposedStatus: feedback.proposedStatus,
-      timestamp: new Date().toISOString(),
-      status: 'pending'
-    }
-    
-    feedbackReports.value.unshift(feedbackRecord)
-    return { success: true }
-  }
+    isLoading.value = true
+    error.value = null
 
-  const getRecentScans = (limit = 10) => {
-    return scanHistory.value.slice(0, limit)
+    try {
+      const response = await api.post('/feedback', {
+        scanId: scanId,
+        keterangan: feedback.keterangan,
+        proposedStatus: feedback.proposedStatus
+      })
+
+      const feedbackRecord = {
+        id: response.data.id || Date.now(),
+        scanId,
+        keterangan: feedback.keterangan,
+        proposedStatus: feedback.proposedStatus,
+        timestamp: new Date().toISOString(),
+        status: 'pending' // Biasanya perlu direview admin
+      }
+
+      feedbackReports.value.unshift(feedbackRecord)
+      return { success: true }
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Gagal mengirim feedback.'
+      return { success: false, error: error.value }
+    } finally {
+      isLoading.value = false
+    }
   }
 
   return {
     scanHistory,
     feedbackReports,
+    isLoading,
+    error,
+    currentScanResult,
+    
+    getRecentScans,
+    
+    fetchScanHistory,
     performScan,
-    submitFeedback,
-    getRecentScans
+    submitFeedback
   }
 })

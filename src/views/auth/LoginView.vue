@@ -27,11 +27,11 @@
             <div class="relative">
               <Mail class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-black/40" />
               <input
-                v-model="email"
-                type="email"
-                required
-                class="w-full pl-11 pr-4 py-3 bg-[#2c63d1]/50 border border-black/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-black placeholder-black/40 transition-all"
-                placeholder="your@email.com"
+              v-model="username"
+              type="text"
+              required
+              class="w-full pl-11 pr-4 py-3 bg-[#2c63d1]/50 border border-black/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-black placeholder-black/40 transition-all"
+              placeholder="your@email.com"
               />
             </div>
           </div>
@@ -43,11 +43,11 @@
             <div class="relative">
               <Lock class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-black/40" />
               <input
-                v-model="password"
-                type="password"
-                required
-                class="w-full pl-11 pr-4 py-3 bg-[#2c63d1]/50 border border-black/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-black placeholder-black/40 transition-all"
-                placeholder="••••••••"
+              v-model="password"
+              type="password"
+              required
+              class="w-full pl-11 pr-4 py-3 bg-[#2c63d1]/50 border border-black/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-black placeholder-black/40 transition-all"
+              placeholder="••••••••"
               />
             </div>
           </div>
@@ -58,27 +58,27 @@
           </div>
 
           <button
-            type="submit"
-            :disabled="loading"
-            class="w-full py-3 mt-4 hover:bg-opacity-90 text-black font-bold rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg border shadow-secondary/30"
+          type="submit"
+          :disabled="loading"
+          class="w-full py-3 mt-4 hover:bg-opacity-90 text-black font-bold rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg border shadow-secondary/30"
           >
-            <span v-if="!loading">Sign In</span>
-            <span v-else class="loading-dots">Authenticating</span>
-            <LogIn v-if="!loading" class="w-5 h-5" />
-          </button>
-        </form>
+          <span v-if="!loading">Sign In</span>
+          <span v-else class="loading-dots">Authenticating</span>
+          <LogIn v-if="!loading" class="w-5 h-5" />
+        </button>
+      </form>
 
-        <div class="mt-6 text-center">
-          <p class="text-black/60 text-sm">
-            Don't have an account?
-            <RouterLink to="/register" class="text-secondary hover:text-black font-semibold transition-colors">
-              Create one
-            </RouterLink>
-          </p>
-        </div>
+      <div class="mt-6 text-center">
+        <p class="text-black/60 text-sm">
+          Don't have an account?
+          <RouterLink to="/register" class="text-secondary hover:text-black font-semibold transition-colors">
+            Create one
+          </RouterLink>
+        </p>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script setup>
@@ -90,7 +90,7 @@ import { Shield, Mail, Lock, LogIn, AlertCircle } from 'lucide-vue-next'
 const router = useRouter()
 const authStore = useAuthStore()
 
-const email = ref('')
+const username = ref('')
 const password = ref('')
 const loading = ref(false)
 const errorMessage = ref('')
@@ -99,10 +99,8 @@ const handleLogin = async () => {
   loading.value = true
   errorMessage.value = ''
 
-  const result = await authStore.login(email.value, password.value)
-
+  const result = await authStore.login(username.value, password.value)
   if (result.success) {
-    // Redirect based on role
     if (authStore.userRole === 'admin') {
       router.push('/admin')
     } else if (authStore.userRole === 'developer') {
