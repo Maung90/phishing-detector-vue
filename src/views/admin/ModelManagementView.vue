@@ -247,7 +247,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 // Menggunakan store yang baru kita buat
-import { useModelStore } from '@/stores/model'
+import { useModelStore } from '@/stores/admin/model'
 import {
   Shield, LogOut, LayoutDashboard, Brain, MessageSquare, History,
   Plus, Trash2, AlertTriangle

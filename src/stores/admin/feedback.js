@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import api from '../utils/axios'
+import api from '../../utils/axios'
 
 export const useFeedbackStore = defineStore('feedback', () => {
   // --- STATE ---

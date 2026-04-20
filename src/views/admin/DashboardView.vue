@@ -23,11 +23,11 @@
       </div>
  -->
       <!-- System Status -->
-      <!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 fade-in">
+      <!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 fade-in bg-red-100">
         <ActivateCard  :models="adminStore.activeModels"/>
       </div> -->
 
-<!-- <QuickAction/> -->
+<QuickAction/>
 </div>
 </div>
 </template>

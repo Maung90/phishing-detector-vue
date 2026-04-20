@@ -32,13 +32,19 @@ const routes = [
     path: '/developer',
     name: 'DeveloperDashboard',
     component: () => import('@/views/developer/DashboardView.vue'),
-    meta: { requiresAuth: true, role: 'developer' }
+    meta: { requiresAuth: true, role: 'user' }
+  },
+  {
+    path: '/developer/manage-key',
+    name: 'KeyManagement',
+    component: () => import('@/views/developer/KeyManagementView.vue'),
+    meta: { requiresAuth: true, role: 'user' }
   },
   {
     path: '/developer/keys',
     name: 'KeyManagement',
-    component: () => import('@/views/developer/KeyManagementView.vue'),
-    meta: { requiresAuth: true, role: 'developer' }
+    component: () => import('@/views/developer/KeysView.vue'),
+    meta: { requiresAuth: true, role: 'user' }
   },
   
   // Admin Routes

@@ -53,7 +53,7 @@ import {
   </div>
 </RouterLink>
 
-<button
+<!-- <button
 class="p-6 bg-[#2c63d1]/50 hover:bg-[#2c63d1] border border-[#2c63d1] rounded-xl transition-all group text-center"
 >
 <div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center group-hover:bg-green-500/30 transition-colors mx-auto mb-3">
@@ -61,7 +61,7 @@ class="p-6 bg-[#2c63d1]/50 hover:bg-[#2c63d1] border border-[#2c63d1] rounded-xl
 </div>
 <h4 class="font-semibold text-white mb-1">Export Data</h4>
 <p class="text-xs text-[#2c63d1]">Generate reports</p>
-</button>
+</button> -->
 </div>
 </div>
 </template>

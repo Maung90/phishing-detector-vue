@@ -2,6 +2,9 @@
 import {
   LayoutDashboard, Key
 } from 'lucide-vue-next'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 </script>
 
 <template>
@@ -13,7 +16,7 @@ import {
         to="/developer"
         :class="[
         'px-4 py-3 font-medium transition-all whitespace-nowrap',
-        $route.path === '/developer'
+        route.path === '/developer'
         ? 'text-secondary border-b-2 border-secondary'
         : 'text-white/60 hover:text-white'
         ]"

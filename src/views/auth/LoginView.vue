@@ -103,7 +103,7 @@ const handleLogin = async () => {
   if (result.success) {
     if (authStore.userRole === 'admin') {
       router.push('/admin')
-    } else if (authStore.userRole === 'developer') {
+    } else if (authStore.userRole === 'user') {
       router.push('/developer')
     } else {
       router.push('/scanner')

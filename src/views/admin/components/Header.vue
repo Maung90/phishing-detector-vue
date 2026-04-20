@@ -2,6 +2,19 @@
 import {
   Shield, LogOut
 } from 'lucide-vue-next'
+
+import { useAuthStore } from '@/stores/auth'
+import { useRouter, useRoute } from 'vue-router'
+
+
+const authStore = useAuthStore()
+const router = useRouter()
+const route = useRoute()
+
+const handleLogout = () => {
+  authStore.logout()
+  router.push('/login')
+}
 </script>
 <template>
     <!-- Header -->
@@ -19,7 +32,7 @@ import {
           </div>
           <button
             @click="handleLogout"
-            class="p-2 hover:bg-[#2c63d1] rounded-lg transition-colors"
+            class="p-2 hover:bg-[#2c63d1] rounded-lg transition-colors cursor-pointer"
             title="Logout"
           >
             <LogOut class="w-5 h-5 text-black" />

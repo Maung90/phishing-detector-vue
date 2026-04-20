@@ -111,7 +111,7 @@ import { computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 // 2. Ganti import dari scanner ke feedback
-import { useFeedbackStore } from '@/stores/feedback'
+import { useFeedbackStore } from '@/stores/admin/feedback'
 import { Header, Navbar, WelcomeMessage, StatCard, QuickAction, UsageChart, ActivateCard } from './components'
 import {
   Shield, LogOut, LayoutDashboard, Brain, MessageSquare, History, Clock

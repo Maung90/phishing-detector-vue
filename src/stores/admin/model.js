@@ -1,7 +1,6 @@
-// src/stores/model.js
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import api from '../utils/axios'
+import api from '../../utils/axios'
 
 export const useModelStore = defineStore('model', () => {
   // --- STATE ---

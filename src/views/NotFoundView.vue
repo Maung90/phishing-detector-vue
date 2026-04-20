@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center p-4 bg-black/">
+  <div class="min-h-screen flex items-center justify-center p-4 bg-[#000]">
     <div class="text-center fade-in">
-      <div class="inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-gradient-to-br from-danger-500 to-danger-700 mb-6 shadow-lg shadow-danger-500/30">
+      <div class="inline-flex items-center justify-center w-24 h-24 rounded-2xl mb-6 shadow-lg shadow-danger-500/30">
         <AlertTriangle class="w-12 h-12 text-white" />
       </div>
 
-      <h1 class="text-8xl font-bold mb-4 bg-gradient-to-r from-cyber-400 to-cyan-400 bg-clip-text text-transparent">
+      <h1 class="text-8xl font-bold mb-4  text-transparent">
         404
       </h1>
 

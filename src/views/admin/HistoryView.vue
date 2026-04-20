@@ -44,6 +44,20 @@
           </div>
         </div>
 
+        <div class="flex justify-end my-2">
+          <button
+          @click="downloadReport"
+          :disabled="isDownloading"
+          class="p-3 bg-red-800 hover:bg-red-700 text-white font-semibold rounded-lg text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg"
+          >
+          <span v-if="!isDownloading">Download Report</span>
+          <span v-else class="flex items-center gap-2">
+            <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            Downloading...
+          </span>
+        </button>
+      </div>
+
         <div class="glass-effect rounded-2xl shadow-2xl overflow-hidden fade-in bg-[#2c63d1]/20 border border-black/10">
           <div class="overflow-x-auto">
             <table class="w-full">
@@ -123,11 +137,12 @@
 </template>
 
 <script setup>
-// Tambahkan onMounted dari vue
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { useHistoryStore } from '@/stores/history' // Ubah import ke history store
+import { useHistoryStore } from '@/stores/admin/history'
+import api from '@/utils/axios'
+
 import {
   Shield, LogOut, LayoutDashboard, Brain, MessageSquare, History,
   AlertTriangle, ShieldCheck, QrCode, Upload, Link2
@@ -135,10 +150,11 @@ import {
 
 import { Header, Navbar, WelcomeMessage } from './components'
 
+const isDownloading = ref(false)
+
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
-
 const historyStore = useHistoryStore()
 
 onMounted(async () => {
@@ -192,5 +208,35 @@ const formatDate = (dateString) => {
 const formatScore = (score) => {
   if (score === undefined || score === null) return 0
     return Math.round(score * 100)
+}
+
+const downloadReport = async () => {
+  isDownloading.value = true
+
+  try {
+    const response = await api.get('/admin/report', {
+      responseType: 'blob'
+    })
+
+    const blob = new Blob([response.data])
+    const url = window.URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.href = url
+
+    const fileName = `SEQR_Report_${new Date().toISOString().split('T')[0]}.pdf`
+    link.setAttribute('download', fileName)
+
+    document.body.appendChild(link)
+    link.click()
+    link.parentNode.removeChild(link)
+    window.URL.revokeObjectURL(url)
+
+  } catch (error) {
+    console.error('Gagal mengunduh laporan:', error)
+    alert('Terjadi kesalahan saat mengunduh laporan.')
+  } finally {
+    isDownloading.value = false
+  }
 }
 </script>
