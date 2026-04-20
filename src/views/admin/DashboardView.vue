@@ -6,10 +6,10 @@
 
     <div class="max-w-7xl mx-auto px-4 py-8">
       <!-- Welcome -->
-      <WelcomeMessage title="Dashboard Admin" message="Here’s a quick overview of your dashboard and recent activity."/>
+      <!-- <WelcomeMessage title="Dashboard Admin" message="Here’s a quick overview of your dashboard and recent activity."/> -->
 
       <!-- Stats Grid -->
-
+<!--
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 fade-in">
 
         <StatCard
@@ -21,14 +21,13 @@
         :color="card.color"
         />
       </div>
-
+ -->
       <!-- System Status -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 fade-in">
-        <!-- Active Models -->
+      <!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 fade-in">
         <ActivateCard  :models="adminStore.activeModels"/>
-    </div>
+      </div> -->
 
-<QuickAction/>
+<!-- <QuickAction/> -->
 </div>
 </div>
 </template>
