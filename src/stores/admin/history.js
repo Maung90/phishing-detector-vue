@@ -30,6 +30,22 @@ export const useHistoryStore = defineStore('history', () => {
   }
 
 
+  // Fungsi untuk mengambil detail riwayat berdasarkan ID
+  const fetchHistoryById = async (id) => {
+    const isDetailLoading = ref(true) 
+    
+    try {
+      const response = await api.get(`/admin/history/${id}`)
+      return { success: true, data: response.data }
+    } catch (err) {
+      const errorMsg = err.response?.data?.detail || 'Gagal mengambil detail riwayat'
+      return { success: false, error: errorMsg }
+    } finally {
+      isDetailLoading.value = false
+    }
+  }
+
+
   return {
     // States
     histories,
@@ -37,6 +53,7 @@ export const useHistoryStore = defineStore('history', () => {
     error,
     
     // Actions
-    fetchAdminHistory
+    fetchAdminHistory,
+    fetchHistoryById
   }
 })

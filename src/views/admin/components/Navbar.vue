@@ -3,7 +3,8 @@ import {
   LayoutDashboard,
   Brain,
   MessageSquare,
-  History
+  History,
+  User
 } from 'lucide-vue-next'
 
 import { useRoute } from 'vue-router'
@@ -19,6 +20,7 @@ const navClass = (path) => {
 
 const menus = [
 { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
+{ name: 'Users', path: '/admin/users', icon: User },
 { name: 'Models', path: '/admin/models', icon: Brain },
 { name: 'Feedback', path: '/admin/feedback', icon: MessageSquare },
 { name: 'History', path: '/admin/history', icon: History }

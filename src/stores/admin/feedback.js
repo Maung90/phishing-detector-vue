@@ -29,7 +29,31 @@ export const useFeedbackStore = defineStore('feedback', () => {
     }
   }
 
+  // Ambil Detail Feedback By ID
+  const fetchFeedbackById = async (id) => {
+    try {
+      const response = await api.get(`/admin/feedbacks/${id}`)
+      return { success: true, data: response.data }
+    } catch (err) {
+      return { success: false, error: err.response?.data?.detail || 'Gagal mengambil detail feedback' }
+    }
+  }
 
+
+  // Update Status Review (PATCH)
+  const markAsReviewed = async (id) => {
+    try {
+      await api.patch(`/admin/feedbacks/${id}/review`)
+      const index = feedbacks.value.findIndex(f => f.id === id)
+      if (index !== -1) {
+        feedbacks.value[index].is_reviewed = true
+      }
+      
+      return { success: true }
+    } catch (err) {
+      return { success: false, error: err.response?.data?.detail || 'Gagal mengubah status' }
+    }
+  }
   return {
     // States
     feedbacks,
@@ -37,6 +61,8 @@ export const useFeedbackStore = defineStore('feedback', () => {
     error,
     
     // Actions
-    fetchAdminFeedback
+    fetchAdminFeedback,
+    fetchFeedbackById,
+    markAsReviewed 
   }
 })

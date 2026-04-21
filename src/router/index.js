@@ -72,6 +72,12 @@ const routes = [
     component: () => import('@/views/admin/HistoryView.vue'),
     meta: { requiresAuth: true, role: 'admin' }
   },
+  {
+    path: '/admin/users',
+    name: 'UsersManagement',
+    component: () => import('@/views/admin/UserView.vue'),
+    meta: { requiresAuth: true, role: 'admin' }
+  },
   
   // 404
   {
