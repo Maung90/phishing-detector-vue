@@ -45,13 +45,12 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const register = async (name, email, password) => {
+  const register = async (username, email, password) => {
     isLoading.value = true
     error.value = null
     try {
-      const response = await api.post('/auth/register', { name, email, password })
+      const response = await api.post('/auth/register', { username, email, password })
       
-      // Biasanya setelah register, backend langsung auto-login dan mengembalikan token
       const { access_token, user: userData } = response.data
       
       localStorage.setItem('access_token', access_token)

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import api from '../utils/axios' // Import custom axios instance
+import api from '../utils/axios'
 
 export const useScannerStore = defineStore('scanner', () => {
   const scanHistory = ref([])
@@ -15,29 +15,40 @@ export const useScannerStore = defineStore('scanner', () => {
     return (limit = 10) => scanHistory.value.slice(0, limit)
   })
 
+  // 1. Fetch History
   const fetchScanHistory = async (limit = 100) => {
     try {
-      const response = await api.get(`/scans?limit=${limit}`)
-      scanHistory.value = response.data.history || []
+      const response = await api.get(`/history?limit=${limit}`) 
+      scanHistory.value = response.data || []
     } catch (err) {
       console.error('Gagal mengambil riwayat scan:', err)
     }
   }
 
-const performScan = async (scanData) => {
+  // 2. Perform Scan
+  const performScan = async (scanData) => {
     isLoading.value = true
     error.value = null
     currentScanResult.value = null
 
     try {
-      const targetData = scanData.url || scanData.data
+      const targetUrl = scanData.url || scanData.data
 
-      const response = await api.post('/scan', {
-        type: scanData.type,
-        target: targetData
+      const response = await api.post('/detect', {
+        url: targetUrl
       })
       
-      const scanRecord = response.data.result
+      const resultData = response.data
+
+      const scanRecord = {
+        id: resultData.id,
+        url: resultData.url,
+        status: resultData.status,
+        score: resultData.probability,
+        top_reasons: resultData.top_reasons,
+        type: scanData.type,
+        timestamp: new Date().toISOString()
+      }
 
       currentScanResult.value = scanRecord
 
@@ -49,22 +60,23 @@ const performScan = async (scanData) => {
 
       return { success: true, data: scanRecord }
     } catch (err) {
-      error.value = err.response?.data?.message || err.response?.data?.detail || 'Terjadi kesalahan saat menganalisis target.'
+      error.value = err.response?.data?.detail || err.response?.data?.message || 'Terjadi kesalahan saat menganalisis target.'
       return { success: false, error: error.value }
     } finally {
       isLoading.value = false
     }
   }
 
+  // 3. Submit Feedback
   const submitFeedback = async (scanId, feedback) => {
     isLoading.value = true
     error.value = null
 
     try {
       const response = await api.post('/feedback', {
-        scanId: scanId,
-        keterangan: feedback.keterangan,
-        proposedStatus: feedback.proposedStatus
+        detection_history_id: scanId,
+        label: feedback.proposedStatus,
+        keterangan: feedback.keterangan
       })
 
       const feedbackRecord = {
@@ -73,13 +85,13 @@ const performScan = async (scanData) => {
         keterangan: feedback.keterangan,
         proposedStatus: feedback.proposedStatus,
         timestamp: new Date().toISOString(),
-        status: 'pending' // Biasanya perlu direview admin
+        status: 'pending' 
       }
 
       feedbackReports.value.unshift(feedbackRecord)
       return { success: true }
     } catch (err) {
-      error.value = err.response?.data?.message || 'Gagal mengirim feedback.'
+      error.value = err.response?.data?.detail || err.response?.data?.message || 'Gagal mengirim feedback.'
       return { success: false, error: error.value }
     } finally {
       isLoading.value = false
@@ -87,14 +99,17 @@ const performScan = async (scanData) => {
   }
 
   return {
+    // States
     scanHistory,
     feedbackReports,
     isLoading,
     error,
     currentScanResult,
     
+    // Getters
     getRecentScans,
     
+    // Actions
     fetchScanHistory,
     performScan,
     submitFeedback
