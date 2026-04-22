@@ -17,7 +17,7 @@
           <span class="block sm:inline">{{ historyStore.error }}</span>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 fade-in">
+        <div class="flex gap-6  mb-8 fade-in">
           <div class="glass-effect rounded-xl p-6 bg-[#2c63d1]/5 border border-black/10">
             <div class="text-3xl font-bold text-black mb-1">
               {{ historyStore.histories.length }}
@@ -73,12 +73,12 @@
             </thead>
             <tbody class="divide-y divide-black/10">
               <tr
-              v-for="scan in historyStore.histories"
+              v-for="(scan, index) in historyStore.histories"
               :key="scan.id"
               class="hover:bg-[#2c63d1]/5 transition-colors"
               >
               <td class="px-6 py-4">
-                <code class="text-sm font-mono text-[#231abe]">{{ scan.id }}</code>
+                <code class="text-sm font-mono text-[#231abe]">{{ index+1 }}</code>
               </td>
               <td class="px-6 py-4">
                 <p class="text-sm text-black max-w-xs truncate font-mono">
@@ -204,7 +204,6 @@ class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-cent
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
 import { useHistoryStore } from '@/stores/admin/history'
 import api from '@/utils/axios'
 
@@ -219,7 +218,6 @@ const isDownloading = ref(false)
 
 const router = useRouter()
 const route = useRoute()
-const authStore = useAuthStore()
 const historyStore = useHistoryStore()
 
 const showDetailModal = ref(false)

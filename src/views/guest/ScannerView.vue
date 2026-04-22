@@ -14,12 +14,12 @@
           </div>
         </div>
         <button @click="handleLogout"
-          class="flex items-center gap-2 px-3.5 py-2 rounded-lg border text-sm font-medium transition-colors"
+          class="flex items-center gap-2 px-3.5 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer"
           style="color:#6b7fa3; border-color:rgba(44,99,209,0.15);"
           @mouseenter="e => e.currentTarget.style.color='#2c63d1'"
           @mouseleave="e => e.currentTarget.style.color='#6b7fa3'">
-          <LogOut class="w-4 h-4" />
-          <span>Keluar</span>
+          <DoorOpen class="w-4 h-4" />
+          <span>Daftar</span>
         </button>
       </div>
     </header>
@@ -321,7 +321,7 @@ import { useScannerStore } from '@/stores/scanner'
 import { Html5Qrcode } from 'html5-qrcode'
 
 import {
-  Shield, QrCode, Upload, Link2, Scan, LogOut, X, Info,
+  Shield, QrCode, Upload, Link2, Scan, DoorOpen, X, Info,
   AlertTriangle, MessageSquare, Send, CheckCircle
 } from 'lucide-vue-next'
 

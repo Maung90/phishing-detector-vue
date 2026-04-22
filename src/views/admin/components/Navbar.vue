@@ -29,8 +29,8 @@ const menus = [
 </script>
 
 <template>
- <!-- Navigation -->
-  <nav class="glass-effect border-b border-white/10 bg-[#2c63d1]/50">
+  <nav class="glass-effect backdrop-blur-md"
+    style="background: rgba(255, 255, 255, 0.6); border-bottom: 1px solid rgba(44, 99, 209, 0.08);">
   <div class="max-w-7xl mx-auto px-4">
     <div class="flex gap-1 overflow-x-auto">
       <RouterLink
@@ -51,3 +51,9 @@ const menus = [
 </div>
 </nav>
 </template>
+
+<style scoped>
+component, span {
+  font-family: 'JetBrains Mono', monospace;
+}
+</style>
