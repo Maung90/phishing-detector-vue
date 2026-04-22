@@ -5,6 +5,21 @@
   --color-dark: #1a1a1a;
   --font-sans: "Plus Jakarta Sans", "ui-sans-serif", "system-ui", sans-serif;
 }
+:root {
+  /* Palet Warna Baru */
+  --color-primary: #fafcfc;
+  --color-secondary: #2c63d1;
+
+  /* Warna Teks Tambahan agar kontras (opsional, sesuaikan kebutuhan) */
+  --color-text-light: #ffffff;
+  --color-text-dark: #12161c;
+}
+
+/* Contoh penerapan langsung pada body */
+body {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+}
 
 html {
   scroll-behavior: smooth;
